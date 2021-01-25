@@ -41,6 +41,7 @@ def load_version():
     with open(filename, "rt") as version_file:
         conan_init = version_file.read()
         version = re.search(r"__version__ = '([0-9a-z.-]+)'", conan_init).group(1)
+        version = version.split("-")[0]
         return version
 
 
