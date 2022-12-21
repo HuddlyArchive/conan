@@ -4,21 +4,21 @@
 Map stage_node_info = [:]
 String slack_channel = BRANCH_NAME == "master" ? "#builds-falcon" : ""
 
+DOCKER_BUILD_IMAGE = 'falcon-docker-prod-local/pytooling_build:1.1.7'
+
+
 pipeline {
     agent none
 
     environment {
-        REMOTE="falcon"
+        REMOTE="huddly-python-prod"
         ARTIFACTORY_ACCESS_TOKEN=credentials('artifactory-access-token')
         ARTIFACTORY_USER="jenkins"
     }
 
     stages {
         stage ('package modules') {
-            agent { docker huddlydocker([
-                configKey: "falcon_pytooling_build",
-                label: "docker"
-            ]) }
+            agent {  docker huddlydocker([overrideImage: "$DOCKER_BUILD_IMAGE"]) }
             stages {
                 stage ('build & upload') {
                     when {
